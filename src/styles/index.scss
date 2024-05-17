@@ -1,11 +1,31 @@
 
+@import "./ti-flowchart-components.css";
+
+:root {
+    --grid-bg-color: rgba(0, 0, 0, 0.03)
+}
+
 .appTui{
-    .button{
+    .btn{
         cursor: pointer;
-        border: solid 1px;
-        padding: 2px 10px;
+        border: solid 1px transparent;
+        padding: 1px 10px;
         line-height: 20px;
-        font-size: 14px;
         border-radius: 3px;
+        color: #2c3e50;
+        font-size: 12px;
+        background-color: #ffffff;
+        transition: background-color 0.5s linear;
+        margin: 0 5px;
+        &.btn-primary, &:hover{
+            color: #ffffff;
+            background-color: #6666f0;
+        }
+        &:disabled {
+            cursor: no-drop;
+            background-color: light-dark(rgba(239, 239, 239, 0.3), rgba(19, 1, 1, 0.3));
+            color: light-dark(rgba(16, 16, 16, 0.3), rgba(255, 255, 255, 0.3));
+            border-color: light-dark(rgba(118, 118, 118, 0.3), rgba(195, 195, 195, 0.3));
+        }
     }
 }

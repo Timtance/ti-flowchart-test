@@ -2,7 +2,7 @@
   <div class="content_bg">
     <span>Ti-FlowChart</span>
     <span>" 工作流 使用可视化编辑器... "</span>
-    <span class="button" @click="emitEvent">开始</span>
+    <span class="btn" @click="emitEvent">开始</span>
   </div>
 </template>
 
@@ -50,7 +50,7 @@ export default {
     background-clip: text;
     color: transparent;
   }
-  .button{
+  .btn{
     margin-top: 30px;
     opacity: 0.5;
     &:hover{
