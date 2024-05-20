@@ -2,48 +2,12 @@
   <div class="appTui">
     <login v-if="isSwitch" @login-event="onLoginEvent"></login>
     <container v-else></container>
-
-    <!-- <img alt="Vue logo" src="./assets/logo.png"/> -->
-    <!-- <button @click="isSwitch=!isSwitch">切换</button>
-    <template v-if="isSwitch">
-      <login @login-event="onLoginEvent"></login>
-    </template>
-    <template v-else>
-      <button @click="tuiFlowChartInput">数据导入</button>
-      <button @click="tuiFlowChartOutput">数据导出</button>
-      <button @click="tuiFlowChartZoomIn">放大</button>
-      <button @click="tuiFlowChartZoomOut">缩小</button>
-      {{ !tuiFlowChartRef && mapFlowDefault() }}
-      <button @click="tuiFlowChartClear">清空</button>
-      <button @click="tuiFlowChartChangeValue">改模板内容</button>
-      <button @click="tuiFlowChartMove">移植</button>
-      <button @click="tuiFlowChartZoomOpen">开启放大镜</button>
-      <button @click="tuiFlowChartZoomClose">关闭放大镜</button>
-      
-      <div style=" border-radius: 5px; border: solid 1px #f0efee; height: 300px; display: flex; margin-top: 20px;">
-        <ul id="ulBox" style="width: 150px; list-style: none; padding: 0; margin: 0; background: #ebf0fc; padding: 5px; border: solid 1px #ebf0fc; border-radius: 5px;">
-          <li id="A1" style="list-style: none; border: 1px solid #3fb41f; background-color: rgb(63 180 31 / 15%); border-radius: 5px; height: 30px; line-height: 30px; margin: 5px; color: #3fb41f;">
-            模块A
-          </li>
-          <li id="B1" style="list-style: none; border: 1px solid #dfdddc; background-color: rgb(255 255 255 / 50%); border-radius: 5px; height: auto; line-height: 30px; margin: 5px; color: #787777;">
-            <ul style="display: flex; list-style: none; justify-content: space-around; padding: 0;">
-              <li><span data-key="value" style="display: block; width: 70px;">{{ templateSpan }}</span></li>
-              <li><span data-key="active">..</span></li>
-            </ul>
-            <div data-key="context">{{ templateSpan }}</div>
-            <div><input data-key="state" style="width: -webkit-fill-available;"/></div>
-          </li>
-        </ul>
-        <div id="mapFlow" @click="onEvent" @created="onEvent" @selected="onEvent" @change="onEvent" style="position: relative; flex: 1; background: #fafafa;"></div>
-      </div>
-    </template> -->
   </div>
 </template>
 
 <script lang="ts" setup>
 import { onMounted, reactive, ref} from 'vue';
 import { ElMessage, ElMessageBox } from 'element-plus'
-import 'ti-flowchart/lib/ti-flowchart.umd.js';
 import login from './components/login.vue';
 import container from './components/container.vue';
 
