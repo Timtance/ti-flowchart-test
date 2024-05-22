@@ -7,6 +7,21 @@
         <a target="_blank" href="https://gitee.com/Timtance" aria-label="Gitee"><img height="16" src="https://gitee.com/static/images/logo.svg"/></a>
       </span>
       <span>
+        <div @click="tuiFlowChartOutput" title="数据导出">
+          ⎗ &nbsp;Export
+        </div>
+        <div class="content_header_select">
+          Studio <span class="spit">/</span>
+          <select @change="onChangeFrame">
+            <option value="" selected>自由操作</option>
+            <option value="system">系统工作流工程</option>
+          </select>
+        </div>
+        <div @click="tuiFlowChartInput" title="数据导入">
+          ⎘ &nbsp;Import
+        </div>
+      </span>
+      <span>
         <span>" 工作流 使用可视化编辑器... "</span>
       </span>
     </div>
@@ -38,10 +53,11 @@
       </div>
       <div class="flow_main">
         <div class="flow_tools">
-          <span>tools</span>
+          <span style="display: inline-flex; flex-direction: column;">
+            <span>{{ flowProjectName }}</span>
+            <span>tools</span>
+          </span>
           <span>
-            <button class="btn" @click="tuiFlowChartInput">数据导入</button>
-            <button class="btn" @click="tuiFlowChartOutput">数据导出</button>
             <button class="btn" @click="tuiFlowChartZoomIn">放大</button>
             <button class="btn" @click="tuiFlowChartZoomOut">缩小</button>
             <button class="btn btn-primary" @click="tuiFlowChartClear">清空</button>
@@ -79,6 +95,9 @@
             </div>
           </el-form>
         </el-drawer>
+
+        <img v-if="screenshot" class="screenshot" :src="screenshot" alt="截图">
+
       </div>
     </div>
     <div class="content_bottom">
@@ -90,17 +109,22 @@
 
 <script lang="ts" setup>
 import { onMounted, reactive, ref} from 'vue'
-import 'ti-flowchart/lib/ti-flowchart.umd.js';
 import { ElMessage, ElMessageBox } from 'element-plus'
-
 import { FormProps, ElButton, ElDrawer } from 'element-plus'
 import { Check, Close, Plus } from '@element-plus/icons-vue'
+// import 'ti-flowchart/lib/ti-flowchart.umd.js';
+import './mapFlow.js';
+import html2canvas from 'html2canvas';
+import { systemJsonData } from '../mock';
+import { copyToClipboard } from '../utils';
 
 const formLabelAddValue = ref<string>('')
 const formLabelAlign = reactive<any>({})
 const labelPosition = ref<FormProps['labelPosition']>('right')
 const visible = ref(false)
 const tuiFlowChartRef = ref<any>(null)
+const screenshot = ref<any>(null)
+const flowProjectName = ref('自由操作')
 
 const tuiFlowChartInput = () => {
   ElMessageBox.prompt("数据导入", "数据格式：JSON", {
@@ -117,7 +141,9 @@ const tuiFlowChartInput = () => {
 const tuiFlowChartOutput = () => {
   const data = tuiFlowChartRef.value.getData();
   console.log("tuiFlowChartOutput:" + data.length);
-  ElMessage(JSON.stringify(data));
+  const dataJson = JSON.stringify(data);
+  ElMessage.success('已复制剪贴板, 可Ctrl + v');
+  copyToClipboard(dataJson);
 }
 const tuiFlowChartZoomIn = () => {
   tuiFlowChartRef.value.zoomIn();
@@ -141,6 +167,7 @@ const onEvent = (e:any) => {
       formLabelAlign[v] = e.data[v];
     }
   }
+  capture();
 }
 const domSave = (fun:any) => {
   typeof fun === 'function' && fun();
@@ -151,7 +178,20 @@ const domSave = (fun:any) => {
 const domAdd = () => {
   formLabelAlign[formLabelAddValue.value] = '';
 }
-
+const capture = () => {
+  const element:any = document.getElementById('mapFlow');
+  html2canvas(element.firstElementChild).then(canvas => {
+    screenshot.value = canvas.toDataURL();
+  });
+}
+const onChangeFrame = (e:any) => {
+  let option = e.target.selectedOptions[0];
+  flowProjectName.value = option['innerText'];
+  tuiFlowChartClear();
+  if(option['value'] === 'system') {
+    tuiFlowChartRef.value.load(systemJsonData);
+  }
+}
 onMounted(() => {
   var w:any = window
   var t = new w.tuiFlowChart()
@@ -210,6 +250,9 @@ onMounted(() => {
       }
     }
   }
+  .content_header>span{
+    cursor: pointer;
+  }
   .content_bottom{
     justify-content: right;
   }
@@ -245,7 +288,7 @@ onMounted(() => {
     .flow_main{
       position: relative;
       height: 100%;
-      width: calc(100% - 60px);
+      width: calc(100% - 60px - 10px);
       // flex: 1;
       // display: flex;
       // flex-direction: column;
@@ -278,7 +321,7 @@ onMounted(() => {
               transparent 1px,
               transparent 100px
             );
-          background-size: 50px 50px;
+          background-size: 10px 10px;
         }
       }
     }
@@ -357,6 +400,33 @@ onMounted(() => {
         margin-right: 10px;
       }
     }
+  }
+}
+.screenshot{
+  position: absolute;
+  bottom: 0;
+  height: 100px;
+}
+.content_header_select{
+  color: rgb(102, 102, 240);
+  box-shadow: rgb(185, 198, 207) 1px 1px 4px 0px;
+  padding: 4px 10px;
+  border-radius: 10px;
+  display: inline-flex;
+  align-items: center;
+  .spit{
+    color: rgb(204, 204, 204);
+    margin: 0px 10px;
+  }
+  select {
+    color: rgb(102, 102, 240);
+    border: none;
+    background: none;
+  }
+  select:focus-visible {
+    border-color: red !important;
+    outline-offset: 7px;
+    outline: none;
   }
 }
 </style>
