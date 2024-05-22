@@ -112,8 +112,8 @@ import { onMounted, reactive, ref} from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { FormProps, ElButton, ElDrawer } from 'element-plus'
 import { Check, Close, Plus } from '@element-plus/icons-vue'
-// import 'ti-flowchart/lib/ti-flowchart.umd.js';
-import './mapFlow.js';
+import 'ti-flowchart/lib/ti-flowchart.umd.js';
+// import './mapFlow.js';
 import html2canvas from 'html2canvas';
 import { systemJsonData } from '../mock';
 import { copyToClipboard } from '../utils';
