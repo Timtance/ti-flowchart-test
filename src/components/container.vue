@@ -37,7 +37,7 @@
               </div>
               <div>
                 <div></div>
-                <span>gpt-4</span>
+                <span data-key="title">gpt-4</span>
               </div>
               <div>
                 <span>CLASS1</span>
@@ -53,14 +53,22 @@
       </div>
       <div class="flow_main">
         <div class="flow_tools">
-          <span style="display: inline-flex; flex-direction: column;">
+          <span style="line-height: 20px; font-weight: bold; display: inline-flex; flex-direction: column;">
             <span>{{ flowProjectName }}</span>
-            <span>tools</span>
+            <span style="color: #6666f0;">▶︎&nbsp;In Preview Mode - {{ previewPlay?'开启':'' }}</span>
           </span>
           <span>
-            <button class="btn" @click="tuiFlowChartZoomIn">放大</button>
-            <button class="btn" @click="tuiFlowChartZoomOut">缩小</button>
-            <button class="btn btn-primary" @click="tuiFlowChartClear">清空</button>
+            <el-switch
+              v-model="previewPlay"
+              inline-prompt
+              style="--el-switch-on-color: #F44336; --el-switch-off-color: #6666f0"
+              active-text="Preview STOP"
+              inactive-text="Preview PLAY"
+            />
+            <el-button size="small" :icon="ZoomIn" circle @click="tuiFlowChartZoomIn" title="放大"/>
+            <el-button size="small" :icon="ZoomOut" circle @click="tuiFlowChartZoomOut" title="缩小"/>
+            <el-button size="small" :icon="Delete" circle @click="tuiFlowChartClear" title="清空"/>
+            <!-- <button class="btn btn-primary" @click="tuiFlowChartClear">清空</button> -->
           </span>
         </div>
         <div id="mapFlow" @click="onEvent" @created="onEvent" @selected="onEvent" @change="onEvent" class="flow_container">编辑区</div>
@@ -108,13 +116,12 @@
 </template>
 
 <script lang="ts" setup>
-import { onMounted, reactive, ref} from 'vue'
+import { computed, onMounted, reactive, ref, watch} from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { FormProps, ElButton, ElDrawer } from 'element-plus'
-import { Check, Close, Plus } from '@element-plus/icons-vue'
+import { Check, Close, Plus, ZoomIn, ZoomOut, Delete } from '@element-plus/icons-vue'
 import 'ti-flowchart/lib/ti-flowchart.umd.js';
-// import './mapFlow.js';
-import html2canvas from 'html2canvas';
+// import html2canvas from 'html2canvas';
 import { systemJsonData } from '../mock';
 import { copyToClipboard } from '../utils';
 
@@ -125,6 +132,7 @@ const visible = ref(false)
 const tuiFlowChartRef = ref<any>(null)
 const screenshot = ref<any>(null)
 const flowProjectName = ref('自由操作')
+const previewPlay = ref(false)
 
 const tuiFlowChartInput = () => {
   ElMessageBox.prompt("数据导入", "数据格式：JSON", {
@@ -167,7 +175,7 @@ const onEvent = (e:any) => {
       formLabelAlign[v] = e.data[v];
     }
   }
-  capture();
+  // capture();
 }
 const domSave = (fun:any) => {
   typeof fun === 'function' && fun();
@@ -178,12 +186,12 @@ const domSave = (fun:any) => {
 const domAdd = () => {
   formLabelAlign[formLabelAddValue.value] = '';
 }
-const capture = () => {
-  const element:any = document.getElementById('mapFlow');
-  html2canvas(element.firstElementChild).then(canvas => {
-    screenshot.value = canvas.toDataURL();
-  });
-}
+// const capture = () => {
+//   const element:any = document.getElementById('mapFlow');
+//   html2canvas(element.firstElementChild).then(canvas => {
+//     screenshot.value = canvas.toDataURL();
+//   });
+// }
 const onChangeFrame = (e:any) => {
   let option = e.target.selectedOptions[0];
   flowProjectName.value = option['innerText'];
@@ -203,6 +211,25 @@ onMounted(() => {
 
   tuiFlowChartRef.value = t
 })
+
+watch(
+  () => previewPlay.value,
+  (newValue, oldValue) => {
+    if(newValue){
+      tuiFlowChartRef.value.play();
+    }else{
+      tuiFlowChartRef.value.stop();
+    }
+  }
+)
+
+const tuiFlowChartLength = computed(() => {
+  if(tuiFlowChartRef.value){
+    return tuiFlowChartRef.value.getData().length;
+  }else{
+    return 0
+  }
+});
 </script>
 
 <style lang="scss">
@@ -428,5 +455,8 @@ onMounted(() => {
     outline-offset: 7px;
     outline: none;
   }
+}
+.el-switch{
+  margin: 0 10px;
 }
 </style>

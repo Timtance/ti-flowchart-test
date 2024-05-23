@@ -1,1 +1,22 @@
-# ti-flowchart-test
+
+## TiFlowChart Logs
+- 0.1.3 add ti-flowchart Module and inner functions to mapping object（抽象构造器，注册元素，设置容器映射的元素）
+- 0.2.1 add Zoom in/out functions and modify selected Item css properties. （画布缩放能力，以及元素缩放拖动计算）
+- 0.2.3 Content container size calculation, canvas drag. (内容器尺寸计算，画布拖动。)
+- 0.2.4 add event listener and eventName ['created', 'selected']
+- 0.2.5 fix bug with draw line [dom, undefined]
+-.0.2.7 add modifying dom_item value, add event listener with change event
+- 0.2.8 fix bug with add dom_item event created
+- 0.2.11 add eventName ['change'] and modify draw function
+- 0.2.12 modify value and delete dom_item event dispatch eventName ['change']
+- 0.2.13 add load data and render dom_item
+- 0.2.15 add dom_item disabled attribute {disabled: true}
+- 0.2.16 add gif with example rendering save demo folder
+- 0.2.18 add trigger attribute for loading and rendering
+- 0.2.19 add template of dragItem and data-key of dom, getBodyElement and clear of function
+- 0.2.20 add options of function attribute
+- 0.2.21 add trigger change of event name
+- 0.3.1 add mobile ability of touch
+- 0.4.1 Customization and data binding within drag and drop elements through data key（拖拽元素内部的自定义与数据通过data-key进行绑定，通过change事件进行同步）['INPUT','SELECT'] `<input data-key="state">`
+- 0.4.3 modify to when moving out of bounds, adjust the container size（拖动时自动调整容器尺寸） 
+- 0.5.0 Update Canvas cross-domain and add preview policy play/stop (优化画布跨域、新增预览策略播放/停止)
