@@ -20,3 +20,4 @@
 - 0.4.1 Customization and data binding within drag and drop elements through data key（拖拽元素内部的自定义与数据通过data-key进行绑定，通过change事件进行同步）['INPUT','SELECT'] `<input data-key="state">`
 - 0.4.3 modify to when moving out of bounds, adjust the container size（拖动时自动调整容器尺寸） 
 - 0.5.0 Update Canvas cross-domain and add preview policy play/stop (优化画布跨域、新增预览策略播放/停止)
+- 0.5.1 add data-for and data-in to array list show

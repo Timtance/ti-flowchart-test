@@ -14,6 +14,7 @@
           Studio <span class="spit">/</span>
           <select @change="onChangeFrame">
             <option value="" selected>自由操作</option>
+            <option value="forIn">forIn 模块</option>
             <option value="system">系统工作流工程</option>
           </select>
         </div>
@@ -28,27 +29,7 @@
     <div class="content_body">
       <div class="menu">
         <ul class="ti_fBox_list">
-          <li>
-            <div class="ti_fBox_normal" id="A1">
-              <div>
-                <div class="ti_fBox_icon">Q</div>
-                <span data-key="value">Question Class2</span>
-                <div></div>
-              </div>
-              <div>
-                <div></div>
-                <span data-key="title">gpt-4</span>
-              </div>
-              <div>
-                <span>CLASS1</span>
-                <span>Repair & Service</span>
-              </div>
-              <div>
-                <span>CLASS2</span>
-                <span>Featured services</span>
-              </div>
-            </div>
-          </li>
+          <li><tiFBoxNormal/></li>
         </ul>
       </div>
       <div class="flow_main">
@@ -93,6 +74,13 @@
           >
             <el-form-item v-for="(value, key) in formLabelAlign" :key="key" :label="key" :style="{display: key.toString() === 'sourceId' || key.toString() === 'id'?'none':''}">
               <span v-if="key.toString() === 'sourceId' || key.toString() === 'id'" style="opacity: 0.5;">{{ value }}</span>
+              <div v-else-if="value instanceof Array">
+                <div v-for="(d, k) in value" :key="k">
+                  {{ d }} {{ k}}
+                  <!-- <el-input v-model="value[k]" />
+                  <el-input v-model="value[d]" /> -->
+                </div>
+              </div>
               <el-input v-else v-model="formLabelAlign[key]" />
             </el-form-item>
             <div class="el-form-item_add">
@@ -120,9 +108,10 @@ import { computed, onMounted, reactive, ref, watch} from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { FormProps, ElButton, ElDrawer } from 'element-plus'
 import { Check, Close, Plus, ZoomIn, ZoomOut, Delete } from '@element-plus/icons-vue'
+import { tiFBoxNormal } from '../components/index.ts'
 import 'ti-flowchart/lib/ti-flowchart.umd.js';
 // import html2canvas from 'html2canvas';
-import { systemJsonData } from '../mock';
+import { systemJsonData, forInJsonData } from '../mock';
 import { copyToClipboard } from '../utils';
 
 const formLabelAddValue = ref<string>('')
@@ -193,20 +182,26 @@ const domAdd = () => {
 //   });
 // }
 const onChangeFrame = (e:any) => {
-  let option = e.target.selectedOptions[0];
+  const option = e.target.selectedOptions[0];
   flowProjectName.value = option['innerText'];
   tuiFlowChartClear();
-  if(option['value'] === 'system') {
+  const value:any = option['value'];
+  if(value === 'system') {
     tuiFlowChartRef.value.load(systemJsonData);
+  }else if(value === 'forIn') {
+    tuiFlowChartRef.value.load(forInJsonData);
   }
 }
 onMounted(() => {
-  var w:any = window
-  var t = new w.tuiFlowChart()
-  var dragItemA:any = document.getElementById("A1")
-  t.addDragItem(dragItemA)
+  const w:any = window
+  const t = new w.tuiFlowChart()
+  let dragItem:any = document.getElementById("A1")
+  t.addDragItem(dragItem)
 
-  var dragBox:any = document.getElementById("mapFlow")
+  dragItem = document.getElementById("A2")
+  t.addDragItem(dragItem)
+
+  const dragBox:any = document.getElementById("mapFlow")
   t.setDragBox(dragBox)
 
   tuiFlowChartRef.value = t
@@ -358,40 +353,19 @@ const tuiFlowChartLength = computed(() => {
   list-style: none;
   padding: 0;
  &>li{
-    zoom: 0.2;
+    zoom: var(--ti_fBox_list_zoom);
     border: solid 1px #cccccc;
     border-radius: 15px;
     user-select: none;
     box-shadow: 7px 9px 15px 0px #b9c6cf;
+    margin-top: calc(20px / var(--ti_fBox_list_zoom));
     cursor: pointer;
-  }
-}
-.ti_fBox_normal{
-  color: #757575;
-  background-color: #ffffff;
-  width: 150px;
-  padding: 5px;
-  border-radius: 10px;
-  font-size: 12px;
-  box-shadow: 0px 0px 3px 0px rgb(88 88 88 / 20%);
-  &>div:first-child{
-    display: flex;
-    align-items: center;
-    font-weight: bold;
-    background-color: transparent;
-  }
-  &>div{
-    background: #f4f5f7;
-    margin-top: 5px;
-    border-radius: 5px;
-    padding: 5px;
-    text-align: left;
-  }
-  .ti_fBox_icon{
-    margin-right: 5px; 
-  }
-}
 
+    &:first-child{
+      margin-top: unset;
+    }
+  }
+}
 .el-overlay{
   position: absolute !important;
   background-color: transparent !important;

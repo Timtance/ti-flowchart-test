@@ -8,8 +8,8 @@
 <script lang="ts" setup>
 import { onMounted, reactive, ref} from 'vue';
 import { ElMessage, ElMessageBox } from 'element-plus'
-import login from './components/login.vue';
-import container from './components/container.vue';
+import login from './views/login.vue';
+import container from './views/container.vue';
 
 const templateSpan = ref('Test'); 
 const isSwitch = ref(true)
